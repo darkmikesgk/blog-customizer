@@ -15,7 +15,7 @@ export const ArrowButtonStory: Story = {
 			<>
 				<ArrowButton
 					isMenuOpen={false}
-					onClick={() => alert('Open/Close menu')}
+					onClose={() => alert('Open/Close menu')}
 				/>
 			</>
 		);

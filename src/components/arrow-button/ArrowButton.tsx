@@ -7,28 +7,22 @@ export type OnClick = () => void;
 
 type TArrowButtonProps = {
 	isMenuOpen: boolean;
-	onClick: OnClick;
+	onClose: (status: boolean) => void;
 };
 
-export const ArrowButton = ({ isMenuOpen, onClick }: TArrowButtonProps) => {
+export const ArrowButton = ({ isMenuOpen, onClose }: TArrowButtonProps) => {
 	return (
 		/* Не забываем указаывать role и aria-label атрибуты для интерактивных элементов */
 		<div
 			role='button'
 			aria-label='Открыть/Закрыть форму параметров статьи'
 			tabIndex={0}
-			onClick={onClick}
-			className={clsx({
-				[styles.container]: true,
-				[styles.container_open]: isMenuOpen,
-			})}>
+			onClick={() => onClose(!isMenuOpen)}
+			className={clsx(styles.container, isMenuOpen && styles.container_open)}>
 			<img
 				src={arrow}
 				alt='иконка стрелочки'
-				className={clsx({
-					[styles.container]: true,
-					[styles.arrow_open]: isMenuOpen,
-				})}
+				className={clsx(styles.arrow, isMenuOpen && styles.arrow_open)}
 			/>
 		</div>
 	);
