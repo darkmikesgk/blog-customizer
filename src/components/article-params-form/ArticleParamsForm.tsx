@@ -1,11 +1,12 @@
 import { ArrowButton } from 'components/arrow-button';
 import { Button } from 'components/button';
 import styles from './ArticleParamsForm.module.scss';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useState, useRef } from 'react';
 import {
 	ArticleStateType,
 	backgroundColors,
 	contentWidthArr,
+	defaultArticleState,
 	fontColors,
 	fontFamilyOptions,
 	fontSizeOptions,
@@ -16,6 +17,7 @@ import clsx from 'clsx';
 import { Text } from '../text';
 import { RadioGroup } from '../radio-group';
 import { Separator } from '../separator';
+import { useOutsideClickClose } from '../select/hooks/useOutsideClickClose';
 
 type TArticleParamsFormProps = {
 	articleState: ArticleStateType;
@@ -29,6 +31,15 @@ export const ArticleParamsForm = ({
 	const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 	const [selectArticleState, setSelectArticleState] =
 		useState<ArticleStateType>(articleState);
+	const rootRef = useRef<HTMLDivElement>(null);
+
+	useOutsideClickClose({
+		isOpen: isMenuOpen,
+		rootRef,
+		onClose: () => setIsMenuOpen,
+		onChange: setIsMenuOpen,
+	});
+
 	const handleInputChange = (
 		key: keyof ArticleStateType,
 		value: OptionType
@@ -42,8 +53,13 @@ export const ArticleParamsForm = ({
 		evt.preventDefault();
 		setArticleState(selectArticleState);
 	};
+
+	const handleResetForm = () => {
+		setSelectArticleState(defaultArticleState);
+		setArticleState(defaultArticleState);
+	};
 	return (
-		<>
+		<div ref={rootRef}>
 			<ArrowButton isMenuOpen={isMenuOpen} onClose={setIsMenuOpen} />
 			<aside
 				className={clsx(styles.container, isMenuOpen && styles.container_open)}>
@@ -65,7 +81,7 @@ export const ArticleParamsForm = ({
 						onChange={(selectElement: OptionType) =>
 							handleInputChange('fontSizeOption', selectElement)
 						}
-						name={'Размер шрифта'}
+						name={'fontFamily'}
 						title={'Размер шрифта'}
 					/>
 					<Select
@@ -94,11 +110,11 @@ export const ArticleParamsForm = ({
 						title={'Ширина контента'}
 					/>
 					<div className={styles.bottomContainer}>
-						<Button title='Сбросить' type='reset' />
+						<Button title='Сбросить' type='reset' onClick={handleResetForm} />
 						<Button title='Применить' type='submit' />
 					</div>
 				</form>
 			</aside>
-		</>
+		</div>
 	);
 };
