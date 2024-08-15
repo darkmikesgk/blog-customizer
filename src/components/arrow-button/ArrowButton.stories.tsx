@@ -13,7 +13,10 @@ export const ArrowButtonStory: Story = {
 	render: () => {
 		return (
 			<>
-				<ArrowButton />
+				<ArrowButton
+					isMenuOpen={false}
+					onClose={() => alert('Open/Close menu')}
+				/>
 			</>
 		);
 	},
